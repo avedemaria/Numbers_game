@@ -20,4 +20,5 @@
     <string name="easy_level">ЛЁГКИЙ</string>
     <string name="normal_level">СРЕДНИЙ</string>
     <string name="hard_level">ТЯЖЕЛЫЙ</string>
+    <string name="button_start_game">НАЧАТЬ ИГРУ</string>
 </resources>
