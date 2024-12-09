@@ -1,6 +1,7 @@
 package com.example.numbercomposition.presentation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment
 import com.example.numbercomposition.R
 import com.example.numbercomposition.databinding.ChooseLevelFragmentBinding
 import com.example.numbercomposition.databinding.FragmentWelcomeBinding
+import com.example.numbercomposition.domain.entity.Level
 
 class ChooseLevelFragment: Fragment() {
 
@@ -27,14 +29,46 @@ class ChooseLevelFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.buttonLevelEasy
-        binding.buttonLevelNormal
-        binding.buttonLevelHard
-        binding.buttonLevelTest
+
+
+        with(binding) {
+
+            buttonLevelTest.setOnClickListener {
+                launchGameProcessFragment(Level.TEST)
+            }
+            buttonLevelEasy.setOnClickListener {
+                launchGameProcessFragment(Level.EASY)
+            }
+            buttonLevelNormal.setOnClickListener {
+                launchGameProcessFragment(Level.MEDIUM)
+            }
+            buttonLevelHard.setOnClickListener {
+                launchGameProcessFragment(Level.HARD)
+            }
+        }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
+
+    companion object {
+
+        const val NAME = "ChooseLevelFragment"
+
+        fun newInstance (): ChooseLevelFragment {
+            return ChooseLevelFragment()
+        }
+    }
+
+    private fun launchGameProcessFragment (level :Level) {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.main_container,GameProcessFragment.newInstance(level))
+            .addToBackStack(GameProcessFragment.NAME)
+            .commit()
+    }
+
 }

@@ -1,19 +1,30 @@
 package com.example.numbercomposition.presentation
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.example.numbercomposition.R
 import com.example.numbercomposition.databinding.FragmentGameFinishedBinding
-import com.example.numbercomposition.databinding.FragmentWelcomeBinding
+import com.example.numbercomposition.domain.entity.GameResult
 
-class GameFinishedFragment: Fragment() {
+class GameFinishedFragment : Fragment() {
+
+    private lateinit var gameResult: GameResult
 
     private var _binding: FragmentGameFinishedBinding? = null
     private val binding: FragmentGameFinishedBinding
         get() = _binding ?: throw RuntimeException("FragmentWelcomeBinding is null")
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        parseArgs()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,11 +38,50 @@ class GameFinishedFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.buttonRetry
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    retryGame()
+                }
+            })
+
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+
+    private fun parseArgs() {
+        gameResult = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requireArguments().getSerializable(KEY_GAME_RESULT, GameResult::class.java)
+        } else {
+            requireArguments().getSerializable(KEY_GAME_RESULT) as? GameResult
+        } ?: throw RuntimeException("Level is null")
+
+    }
+
+
+    private fun retryGame() {
+        requireActivity().supportFragmentManager.popBackStack(
+            GameProcessFragment.NAME,
+            FragmentManager.POP_BACK_STACK_INCLUSIVE
+        )
+    }
+
+
+    companion object {
+
+        private const val KEY_GAME_RESULT = "game_result"
+
+        fun newInstance(gameResult: GameResult): GameFinishedFragment {
+            return GameFinishedFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable(KEY_GAME_RESULT, gameResult)
+                }
+            }
+        }
     }
 }

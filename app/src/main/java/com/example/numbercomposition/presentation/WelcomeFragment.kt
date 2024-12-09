@@ -28,7 +28,9 @@ class WelcomeFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.buttonStartGame.setOnClickListener {}
+        binding.buttonStartGame.setOnClickListener {
+            launchChooseLevelFragment()
+        }
     }
 
     override fun onDestroyView() {
@@ -36,4 +38,17 @@ class WelcomeFragment: Fragment() {
         _binding = null
     }
 
+
+    private fun launchChooseLevelFragment() {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.main_container, ChooseLevelFragment.newInstance())
+            .addToBackStack(ChooseLevelFragment.NAME)
+            .commit()
+    }
+
+    companion object {
+        fun newInstance(): WelcomeFragment {
+            return WelcomeFragment()
+        }
+    }
 }
