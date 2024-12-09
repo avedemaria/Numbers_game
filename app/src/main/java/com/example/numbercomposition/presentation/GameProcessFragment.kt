@@ -2,7 +2,6 @@ package com.example.numbercomposition.presentation
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,6 @@ import com.example.numbercomposition.databinding.FragmentGameProcessBinding
 import com.example.numbercomposition.domain.entity.GameResult
 import com.example.numbercomposition.domain.entity.GameSettings
 import com.example.numbercomposition.domain.entity.Level
-import com.example.numbercomposition.domain.usecases.GetGameSettingsUseCase
 
 @Suppress("DEPRECATION")
 class GameProcessFragment : Fragment() {
@@ -59,9 +57,9 @@ class GameProcessFragment : Fragment() {
 
     private fun parseArgs() {
         level = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            requireArguments().getSerializable(KEY_LEVEL, Level::class.java)
+            requireArguments().getParcelable(KEY_LEVEL, Level::class.java)
         } else {
-            requireArguments().getSerializable(KEY_LEVEL) as? Level
+            requireArguments().getParcelable(KEY_LEVEL) as? Level
         } ?: throw RuntimeException("Level is null")
     }
 
@@ -82,7 +80,7 @@ class GameProcessFragment : Fragment() {
         fun newInstance(level: Level): GameProcessFragment {
             return GameProcessFragment().apply {
                 arguments = Bundle().apply {
-                    putSerializable(KEY_LEVEL, level)
+                    putParcelable(KEY_LEVEL, level)
                 }
             }
         }
