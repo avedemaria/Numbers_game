@@ -8,7 +8,7 @@
     <string name="start_game_button">Начать игру</string>
     <string name="sumofnumbers">sumOfNumbers</string>
     <string name="answers_progress">answersProgress</string>
-    <string name="progress_answers">Правильных ответов %s (минимум %s)</string>
+    <string name="progress_answers">Правильных ответов %d (минимум %d)</string>
     <string name="won_or_not_picture">wonOrNotPicture</string>
     <string name="score_answers">Ваш счет: %s</string>
     <string name="required_answers">Необходимое число правильных ответов: %s</string>
