@@ -10,10 +10,12 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.numbercomposition.R
 import com.example.numbercomposition.databinding.FragmentGameProcessBinding
 import com.example.numbercomposition.domain.entity.GameResult
 import com.example.numbercomposition.domain.entity.Level
+import com.example.numbercomposition.presentation.GameFinishedFragment.Companion.KEY_GAME_RESULT
 
 
 class GameProcessFragment : Fragment() {
@@ -81,10 +83,10 @@ class GameProcessFragment : Fragment() {
 
 
     private fun launchGameFinishedFragment(gameResult: GameResult) {
-        requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.main_container, GameFinishedFragment.newInstance(gameResult))
-            .addToBackStack(null)
-            .commit()
+        val args = Bundle().apply {
+            putParcelable(KEY_GAME_RESULT, gameResult)
+        }
+        findNavController().navigate(R.id.action_gameProcessFragment_to_gameFinishedFragment, args)
     }
 
     private fun setClickListenersToOptions () {
@@ -153,7 +155,7 @@ class GameProcessFragment : Fragment() {
 
         const val NAME = "GameProcessFragment"
 
-        private const val KEY_LEVEL = "level"
+        const val KEY_LEVEL = "level"
 
         fun newInstance(level: Level): GameProcessFragment {
             return GameProcessFragment().apply {
