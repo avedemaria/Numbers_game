@@ -1,5 +1,6 @@
 package com.example.numbercomposition.presentation
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -38,6 +39,7 @@ class GameFinishedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
@@ -46,9 +48,12 @@ class GameFinishedFragment : Fragment() {
                 }
             })
 
-        binding.buttonRetry.setOnClickListener{
+        binding.buttonRetry.setOnClickListener {
             retryGame()
         }
+
+        bindViews()
+
 
     }
 
@@ -57,6 +62,47 @@ class GameFinishedFragment : Fragment() {
         _binding = null
     }
 
+
+    @SuppressLint("StringFormatMatches")
+    private fun bindViews() {
+        with(binding) {
+            pictureResult.setImageResource(getPictureResId())
+            tvRequiredAnswers.text = String.format(
+                getString(R.string.required_answers),
+                gameResult.gameSettings.minCountOfRightAnswers.toString()
+            )
+            tvScoreAnswers.text = String.format(
+                getString(R.string.score_answers),
+                gameResult.countOfRightAnswers.toString()
+            )
+            tvRequiredPercentage.text = String.format(
+                getString(R.string.required_percentage),
+                gameResult.gameSettings.minPercentOfRightAnswers.toString()
+            )
+
+            val scorePercentage = getScorePercentage()
+            tvScorePercentage.text = String.format(
+                getString(
+                    R.string.score_percentage,
+                    scorePercentage
+                )
+            )
+
+        }
+    }
+
+    private fun getScorePercentage(): Int {
+       return ((gameResult.countOfRightAnswers / gameResult.countOfQuestions.toDouble()) * 100)
+            .toInt()
+    }
+
+    private fun getPictureResId(): Int {
+        return if (gameResult.winner) {
+            R.drawable.golden_cup_7825
+        } else {
+            R.drawable.cry_5141
+        }
+    }
 
     private fun parseArgs() {
         gameResult = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
