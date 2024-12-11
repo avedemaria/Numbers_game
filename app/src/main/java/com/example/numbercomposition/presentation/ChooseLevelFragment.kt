@@ -1,17 +1,13 @@
 package com.example.numbercomposition.presentation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.numbercomposition.R
 import com.example.numbercomposition.databinding.ChooseLevelFragmentBinding
-import com.example.numbercomposition.databinding.FragmentWelcomeBinding
 import com.example.numbercomposition.domain.entity.Level
-import com.example.numbercomposition.presentation.GameProcessFragment.Companion.KEY_LEVEL
 
 class ChooseLevelFragment : Fragment() {
 
@@ -57,21 +53,10 @@ class ChooseLevelFragment : Fragment() {
     }
 
 
-    companion object {
-
-        const val NAME = "ChooseLevelFragment"
-
-        fun newInstance(): ChooseLevelFragment {
-            return ChooseLevelFragment()
-        }
-    }
-
     private fun launchGameProcessFragment(level: Level) {
-
-        val args = Bundle().apply {
-            putParcelable(KEY_LEVEL, level)
-        }
-        findNavController().navigate(R.id.action_chooseLevelFragment_to_gameProcessFragment, args)
+        findNavController().navigate(
+            ChooseLevelFragmentDirections.actionChooseLevelFragmentToGameProcessFragment(level)
+        )
     }
 
 }

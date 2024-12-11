@@ -1,7 +1,6 @@
 package com.example.numbercomposition.presentation
 
 import android.content.res.ColorStateList
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,22 +10,19 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.example.numbercomposition.R
+import androidx.navigation.fragment.navArgs
 import com.example.numbercomposition.databinding.FragmentGameProcessBinding
 import com.example.numbercomposition.domain.entity.GameResult
-import com.example.numbercomposition.domain.entity.Level
-import com.example.numbercomposition.presentation.GameFinishedFragment.Companion.KEY_GAME_RESULT
 
 
 class GameProcessFragment : Fragment() {
 
-
-    private lateinit var level: Level
+    private val args by navArgs<GameProcessFragmentArgs>()
 
     private val viewModel by lazy {
         ViewModelProvider(
             this,
-            GameViewModelFactory(level, requireActivity().application)
+            GameViewModelFactory(args.level, requireActivity().application)
         )[GameViewModel::class.java]
     }
 
@@ -46,11 +42,6 @@ class GameProcessFragment : Fragment() {
     private val binding: FragmentGameProcessBinding
         get() = _binding ?: throw RuntimeException("FragmentWelcomeBinding is null")
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        parseArgs()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -73,20 +64,10 @@ class GameProcessFragment : Fragment() {
         _binding = null
     }
 
-    private fun parseArgs() {
-        level = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            requireArguments().getParcelable(KEY_LEVEL, Level::class.java)
-        } else {
-            requireArguments().getParcelable(KEY_LEVEL) as? Level
-        } ?: throw RuntimeException("Level is null")
-    }
-
 
     private fun launchGameFinishedFragment(gameResult: GameResult) {
-        val args = Bundle().apply {
-            putParcelable(KEY_GAME_RESULT, gameResult)
-        }
-        findNavController().navigate(R.id.action_gameProcessFragment_to_gameFinishedFragment, args)
+        findNavController().navigate(GameProcessFragmentDirections
+            .actionGameProcessFragmentToGameFinishedFragment(gameResult))
     }
 
     private fun setClickListenersToOptions () {
@@ -151,20 +132,6 @@ class GameProcessFragment : Fragment() {
 
     }
 
-    companion object {
-
-        const val NAME = "GameProcessFragment"
-
-        const val KEY_LEVEL = "level"
-
-        fun newInstance(level: Level): GameProcessFragment {
-            return GameProcessFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelable(KEY_LEVEL, level)
-                }
-            }
-        }
-    }
 
 }
 
