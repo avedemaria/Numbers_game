@@ -1,6 +1,5 @@
 package com.example.numbercomposition.presentation
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.numbercomposition.R
 import com.example.numbercomposition.databinding.FragmentGameFinishedBinding
 
 class GameFinishedFragment : Fragment() {
